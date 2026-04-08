@@ -2,69 +2,52 @@
 <!--
 /**
  * @category   PSystem
- * @package    PSystem_AjaxQuickCart
+ * @package    PSystem_Base
  * @author     Pascal System <info@pascalsystem.pl>
- * @version    1.0.2
+ * @version    1.1.2
  */
 -->
 <config>
 	<modules>
-		<PSystem_AjaxQuickCart>
-			<version>1.0.2</version>
-		</PSystem_AjaxQuickCart>
+		<PSystem_Base>
+			<version>1.1.2</version>
+		</PSystem_Base>
 	</modules>
 	<global>
 		<blocks>
-			<ajaxquickcart>
-				<class>PSystem_AjaxQuickCart_Block</class>
-			</ajaxquickcart>
+			<psbase>
+				<class>PSystem_Base_Block</class>
+			</psbase>
 		</blocks>
+		<models>
+			<psbase>
+				<class>PSystem_Base_Model</class>
+			</psbase>
+		</models>
+		<helpers>
+			<psbase>
+				<class>PSystem_Base_Helper</class>
+			</psbase>
+		</helpers>
 		<events>
-			<controller_action_postdispatch_checkout_cart_add>
+			<controller_action_postdispatch>
 				<observers>
-					<psajaxquickcart_addtocart>
+					<psystem_base_observer>
 						<type>singleton</type>
-						<class>PSystem_AjaxQuickCart_Model_Observer</class>
-						<method>postDispatchAddToCart</method>
-					</psajaxquickcart_addtocart>
+						<class>psbase/observer</class>
+						<method>postdispatch</method>
+					</psystem_base_observer>
 				</observers>
-			</controller_action_postdispatch_checkout_cart_add>
-			<controller_action_layout_load_before>
-				<observers>
-					<psajaxquickcart_catalogproductview>
-						<type>singleton</type>
-						<class>PSystem_AjaxQuickCart_Model_Observer</class>
-						<method>preDispatchCatalogProductView</method>
-					</psajaxquickcart_catalogproductview>
-				</observers>
-			</controller_action_layout_load_before>
-			<controller_action_postdispatch_checkout_cart_delete>
-				<observers>
-					<psajaxquickcart_cartdeleteitem>
-						<type>singleton</type>
-						<class>PSystem_AjaxQuickCart_Model_Observer</class>
-						<method>postDispatchDeleteCartItem</method>
-					</psajaxquickcart_cartdeleteitem>
-				</observers>
-			</controller_action_postdispatch_checkout_cart_delete>
+			</controller_action_postdispatch>
 		</events>
 	</global>
 	<frontend>
 		<layout>
 			<updates>
-				<psajaxquickcart module="PSystem_AjaxQuickCart">
-					<file>ps_ajaxquickcart.xml</file>
-				</psajaxquickcart>
+				<psbase module="PSystem_Base">
+					<file>ps_base.xml</file>
+				</psbase>
 			</updates>
 		</layout>
-		<routers>
-			<ajaxquickcart>
-				<use>standard</use>
-				<args>
-					<module>PSystem_AjaxQuickCart</module>
-					<frontName>ajaxquickcart</frontName>
-				</args>
-			</ajaxquickcart>
-		</routers>
 	</frontend>
 </config>
