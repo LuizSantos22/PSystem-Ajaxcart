@@ -1,0 +1,690 @@
+/* ─────────────────────────────────────────────────────────────
+   General Cart Styles
+───────────────────────────────────────────────────────────── */
+.sidecart-open .elevio-launcher {
+    display: none !important;
+}
+
+.ps-content {
+    --primary-color: #333;
+    --secondary-color: #f0f0f0;
+    --light-background: #ffffff;
+    --dark-background: #f8f8f8;
+    --border-color: #ccc;
+    --error-color: red;
+    --text-color: #666;
+    --hover-opacity: 0.7;
+    --font-size-small: 12px;
+    --font-size-medium: 15px;
+    --font-size-large: 16px;
+}
+
+.ps-content .ajaxemptycart,
+.ps-content .cart {
+    position: fixed;
+    top: 0;
+    right: -7px;
+    width: 350px;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 999999;
+    background: var(--light-background);
+    padding: 9px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+/* Adjustments for small screens (mobile) */
+@media (max-width: 768px) {
+    .ps-content .cart {
+        right: 0; /* Move it away from edge */
+        width: 90vw; /* Use 90% of screen width */
+        max-width: 400px; /* Optional limit if needed */
+        left: 50%;
+        transform: translateX(-50%); /* Center horizontally */
+    }
+
+    .ps-content .scrollable-area {
+        padding: 0 10px; /* Add horizontal padding inside scroll area */
+    }
+}
+
+.ps-content .cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999998;
+    display: none;
+}
+
+.ps-content .cart-overlay.show {
+    display: block;
+}
+
+body.push-body {
+    overflow: hidden !important;
+}
+
+body.push-body #root-wrapper,
+body.push-body .ps-content .cart {
+    transform: translateX(-350px);
+}
+
+/* Ensure cart remains visible when active */
+body.push-body .ps-content .cart {
+    display: flex;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Scrollable Area & Table Styling
+───────────────────────────────────────────────────────────── */
+
+.ps-content .cart .scrollable-area {
+    overflow-y: auto;
+    height: calc(100vh - 150px); /* Leave space for header/footer */
+    transition: overflow-y 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .ps-content .cart .scrollable-area {
+        height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+}
+
+/* Product table layout */
+.ps-content .cart .flex-table {
+    width: 100%;
+    border-collapse: separate; /* Required for rounded corners on table */
+    table-layout: fixed;
+    word-wrap: break-word;
+    background-color: #fbfbfb; /* Light grey background */
+    border-radius: 5px; /* Rounded corners */
+    overflow: hidden; /* Ensures inner elements also respect the border radius */
+}
+
+.ps-content .cart .flex-table td {
+    word-wrap: break-word;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Quantity Input & Buttons
+───────────────────────────────────────────────────────────── */
+
+.product-quantity-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    overflow: hidden;
+    width: 100px;
+}
+
+.btn-quantity {
+    background-color: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    border: none;
+    font-size: var(--font-size-large);
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    z-index: 2; /* Always above input */
+}
+
+.btn-quantity:hover {
+    background-color: var(--secondary-color);
+}
+
+.input-quantity {
+    width: 40px;
+    text-align: center;
+    border: none;
+    font-size: var(--font-size-medium);
+    padding: 2px;
+    margin: 0;
+    background-color: var(--light-background);
+    outline: none;
+    z-index: 1;
+}
+
+/* Hide browser spinner arrows in number inputs */
+.input-quantity::-webkit-outer-spin-button,
+.input-quantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.input-quantity[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Remove Item Button (Trash Icon)
+───────────────────────────────────────────────────────────── */
+
+.detail-remove-item {
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+    z-index: 3; /* Ensure it's above image */
+    position: relative;
+}
+
+.detail-remove-item i.bi-trash3 {
+    font-size: 18px;
+    color: #b4b4b4;
+    cursor: pointer;
+}
+
+/* Make sure remove button doesn't go behind image */
+.detail-remove-item a {
+    display: inline-block;
+    position: relative;
+    z-index: 3;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Cart Columns Layout
+───────────────────────────────────────────────────────────── */
+
+/* 1. Row container */
+#shopping-cart-table tr.cart-item-row {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 1.3em;
+  margin-bottom: 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 2. Col 1: Thumbnail (fixed 75px, top-aligned) */
+#shopping-cart-table tr.cart-item-row td.col-thumb {
+  flex: 0 0 75px;
+  border-radius:5px;
+  margin-right: 1em;
+  padding: 0;
+  align-self: flex-start;
+  
+}
+
+/* 3. Col 2: Details (title above price) */
+#shopping-cart-table tr.cart-item-row td.col-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 0 1em 0 0;
+  box-sizing: border-box;
+}
+#shopping-cart-table tr.cart-item-row td.col-details .detail-title {
+  margin: 0;
+  font-weight: normal;
+}
+#shopping-cart-table tr.cart-item-row td.col-details .detail-price {
+  margin-top: 0.25em;
+}
+
+/* 4. Col 3: Empty spacer */
+#shopping-cart-table tr.cart-item-row td.col-spacer {
+  flex: 1 2 auto;
+  padding: 0;
+  margin: 0;
+}
+
+/* 5. Col 4: Quantity + Remove (stacked, right-aligned) */
+#shopping-cart-table tr.cart-item-row td.col-qty {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    padding: 0 1em 0 0;
+    /* ← swap to right padding so content moves left */
+    align-items: flex-start;
+    /* ← align contents to the left edge */
+    box-sizing: border-box;
+}
+/* 5a. Quantity buttons & input */
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty,
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty .product-quantity-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 0;
+    width: 80px;
+    overflow: hidden;
+    /* Adicionado: contém o hover dentro dos limites */
+}
+
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty .btn-quantity {
+    background-color: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    border: none;
+    font-size: var(--font-size-large);
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty .btn-quantity:hover {
+    background-color: var(--secondary-color);
+}
+
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty .input-quantity {
+    width: 40px;
+    text-align: center;
+    border: none;
+    font-size: var(--font-size-medium);
+    padding: 2px;
+    margin: 0;
+    background-color: #fbfbfb;
+    outline: none;
+}
+
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty input[type="number"]::-webkit-outer-spin-button,
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-qty input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* 5b. Remove link below qty */
+#shopping-cart-table tr.cart-item-row td.col-qty .detail-remove-item {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em; /* Add spacing below */
+    font-size: 0.9em;
+    text-align: center;
+    /* Center align the text */
+    display: block;
+    /* Ensure text-align works properly */
+    width: 100%;
+    /* Full width for proper alignment */
+}
+
+/* 6. Reset cell defaults & wrap long text */
+#shopping-cart-table tr.cart-item-row td {
+    padding: 0;
+    box-sizing: border-box;
+    word-wrap: break-word;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   Coupon Field Styles
+───────────────────────────────────────────────────────────── */
+
+.ps-coupon-input-group {
+    width: 100%;
+}
+
+.ps-coupon-field {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.ps-coupon-input {
+    flex: 1 1 auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5em 5.5em 0.5em 0.75em;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: var(--font-size-medium);
+    background: var(--light-background);
+}
+
+.ps-coupon-btn,
+.ps-remove-coupon-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 0 1em;
+    border: none;
+    background: var(--primary-color);
+    color: #ffffff;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+.ps-coupon-btn:hover {
+    background: #4e77b1;
+}
+
+.ps-remove-coupon-btn {
+    background: #e02b27;
+}
+
+.ps-remove-coupon-btn:hover {
+    background: #c02522;
+}
+
+.ps-coupon-input[readonly] {
+    background: #f5f5f5;
+}
+
+@media (max-width: 480px) {
+    .ps-coupon-input {
+        padding-right: 4.5em;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Total, Discount, Final Total
+───────────────────────────────────────────────────────────── */
+
+.ps-subtotal-wrapper {
+    background-color: var(--dark-background);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px auto;
+    width: calc(100% + 5px);
+    max-width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.ps-subtotal-container,
+.ps-discount-row,
+.ps-final-total-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.ps-final-total-container {
+    margin-bottom: 0;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+}
+
+.ps-label {
+    flex: 1;
+    text-align: left;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.ps-price,
+.ps-discount-amount,
+.ps-final-price {
+    flex-shrink: 0;
+    text-align: right;
+    font-weight: bold;
+}
+
+.ps-discount-amount {
+    color: #e02b27;
+}
+
+@media (max-width: 768px) {
+    .ps-subtotal-wrapper {
+        width: calc(100% - 3px);
+        padding: 10px;
+    }
+
+    .ps-label {
+        margin-right: 5px;
+        font-size: 14px;
+    }
+
+    .ps-price,
+    .ps-discount-amount,
+    .ps-final-price {
+        font-size: 14px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Footer Buttons & Miscellaneous
+───────────────────────────────────────────────────────────── */
+
+.ps-content .cart .buttons-container {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--light-background);
+    z-index: 999999;
+}
+
+/* Generic full-width button style */
+.ps-content .cart .buttons-container .button,
+.ps-content .btn-viewcart,
+.ps-content .btn-continue {
+    width: 100%;
+    text-align: center;
+    font-size: var(--font-size-small);
+    margin: 5px 0;
+    padding: 8px 15px;
+    border: 0;
+    border-radius: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+}
+
+/* View Cart Button Specifics */
+.ps-content .btn-viewcart {
+    background-color: #28A745 !important;
+    color: #fff !important;
+    transition: background-color 0.3s ease;
+}
+
+.ps-content .btn-viewcart:hover {
+    background-color: #218838 !important;
+}
+
+/* Continue Shopping Button Specifics */
+.ps-content .btn-continue {
+    background-color: transparent !important;
+    color: #2c85c8 !important;
+    border: 2px solid #2c85c8 !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.ps-content .btn-continue:hover {
+    background-color: #2c85c8 !important;
+    color: #fff !important;
+}
+
+
+.pscart {
+    width: 355px;
+    height: 72px;
+}
+
+.ps-col-icon,
+.ps-col-title {
+    display: flex;
+    align-items: center;
+    margin-left: 7px;
+}
+
+.ps-col-icon {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    margin-left: -9px;
+    flex: 0 0 auto;
+    height: 100%;
+}
+
+@media (max-width: 768px) {
+    .ps-col-icon {
+        margin-left: 8px;
+    }
+}
+
+.ps-col-title h5 {
+    margin: 0 5px;
+}
+
+.ps-col-edit {
+    margin: 0;
+    padding-top: 5px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.ic.ic-edit2 {
+    display: none;
+}
+
+.ic.ic-edit2:before {
+    content: '';
+}
+
+.ic.ic-edit2 {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml,...'); /* your SVG data here */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0;
+    transform: translateX(-15px);
+}
+
+tr.first.last.odd td.first {
+    padding-left: 10px;
+}
+
+@media (max-width: 768px) {
+    tr.first.last.odd td.first {
+        padding-left: 20px;
+    }
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-width: 350px;
+    margin-top: -0.8rem;
+    background: #fafafa;
+}
+
+.d-flex .img {
+    margin-right: 10px;
+}
+
+.ps-product-details {
+    flex-grow: 1;
+    min-width: 0;
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
+
+@media (max-width: 768px) {
+    .ps-content .cart {
+        width: 100%;
+    }
+}
+
+.ps-content .cart-overlay {
+    pointer-events: none;
+}
+
+body.push-body .cart-overlay {
+    display: block !important;
+    pointer-events: auto;
+}
+
+body.push-body {
+    transform: translateX(-350px);
+    transition: transform 0.5s ease;
+    overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Fix Z-Index for Remove Button and Quantity Buttons
+───────────────────────────────────────────────────────────── */
+
+#shopping-cart-table tr.cart-item-row td.col-qty {
+    position: relative;
+    z-index: 2;
+}
+
+.detail-remove-item a,
+.detail-qty .btn-quantity {
+    position: relative;
+    z-index: 3;
+}
+
+.detail-remove-item a::after,
+.detail-qty .btn-quantity::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Responsive Behavior
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+    .ps-content .cart {
+        width: 100%;
+        right: 0;
+    }
+
+    .ps-subtotal-wrapper {
+        padding: 5px;
+    }
+
+    .product-quantity-wrapper {
+        width: 80px;
+    }
+
+    .btn-quantity {
+        width: 25px;
+        height: 25px;
+    }
+
+    .input-quantity {
+        width: 30px;
+    }
+
+    .ps-col-title h5 {
+        font-size: 14px;
+    }
+
+    .ps-col-icon a i {
+        font-size: 16px;
+    }
+}
